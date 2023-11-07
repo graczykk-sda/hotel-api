@@ -1,10 +1,10 @@
-package com.example.api.hotel;
+package com.example.api.accommodations;
 
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/accommodation")
-class AccommodationApi {
+class AccommodationController {
 
     @PostMapping
     RoomUtilization createAccommodation(@RequestBody Accommodation accommodation) {
