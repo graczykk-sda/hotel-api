@@ -31,7 +31,7 @@ sourceSets {
 }
 
 task integrationTest(type: Test) {
-	description = "Run integration tests"
+	description = "Run integration tests."
 	group = "verification"
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
 	classpath = sourceSets.integrationTest.runtimeClasspath
