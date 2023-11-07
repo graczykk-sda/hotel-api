@@ -1,5 +1,6 @@
 package com.example.api.customers;
 
+import com.example.api.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
@@ -27,10 +28,7 @@ class CustomerRepositoryTest {
                 new CustomerRepository("http://localhost:" + wireMockRuntimeInfo.getHttpPort(), new ObjectMapper());
 
         List<Customer> allCustomers = customerRepository.getAllCustomers();
-        List<Customer> expectedCustomers = List.of(
-                new Customer(23), new Customer(45), new Customer(155), new Customer(374), new Customer(22),
-                new Customer(99), new Customer(100), new Customer(101), new Customer(115), new Customer(209)
-        );
+        List<Customer> expectedCustomers = TestUtils.defaultCustomerList();
         Assertions.assertIterableEquals(expectedCustomers, allCustomers);
     }
 }

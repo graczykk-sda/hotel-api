@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Repository
-class CustomerRepository {
+class CustomerRepository implements CustomersApi {
 
     private final String jsonPath;
     private final ObjectMapper objectMapper;
@@ -20,9 +20,15 @@ class CustomerRepository {
         this.jsonPath = jsonPath;
         this.objectMapper = objectMapper;
     }
-    List<Customer> getAllCustomers() throws IOException {
-        URL url = URI.create(jsonPath).toURL();
-        int[] customerPrizes = objectMapper.readValue(url, int[].class);
-        return Arrays.stream(customerPrizes).mapToObj(Customer::new).toList();
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        try {
+            URL url = URI.create(jsonPath).toURL();
+            int[] customerPrizes = objectMapper.readValue(url, int[].class);
+            return Arrays.stream(customerPrizes).mapToObj(Customer::new).toList();
+        } catch (IOException e) {
+            throw new CustomerAccessException(e);
+        }
     }
 }

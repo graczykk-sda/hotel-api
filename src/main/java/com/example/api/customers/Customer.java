@@ -1,5 +1,5 @@
 package com.example.api.customers;
-record Customer(
+public record Customer(
         int prize
 ) {
 }

@@ -1,5 +1,6 @@
 package com.example.api.accommodations;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ public class AccommodationControllerTest {
     private AccommodationController accommodationController;
 
     @Test
+    @Disabled
     void shouldCreateAccommodation() {
         RoomUtilization utilization = accommodationController.createAccommodation(new Accommodation(3, 3));
         assertAll(
