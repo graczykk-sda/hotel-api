@@ -1,28 +1,43 @@
 package com.example.api.accommodations;
 
-import org.junit.jupiter.api.Disabled;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@WebMvcTest(controllers = AccommodationController.class)
+@AutoConfigureMockMvc
 public class AccommodationControllerTest {
 
     @Autowired
-    private AccommodationController accommodationController;
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockBean
+    private AccommodationService accommodationService;
 
     @Test
-    @Disabled
-    void shouldCreateAccommodation() {
-        RoomUtilization utilization = accommodationController.createAccommodation(new Accommodation(3, 3));
-        assertAll(
-                () -> assertEquals(3, utilization.premiumUsed()),
-                () -> assertEquals(3, utilization.economyUsed()),
-                () -> assertEquals(738, utilization.economyGain()),
-                () -> assertEquals(167, utilization.premiumGain())
-        );
+    void shouldInvokeCreateAccommodation() throws Exception {
+        Accommodation givenAccommodation = new Accommodation(3, 3);
+        when(accommodationService.placeCustomers(givenAccommodation)).thenReturn(new RoomUtilization(1, 1, 100, 100));
+
+        String json = objectMapper.writeValueAsString(givenAccommodation);
+        this.mockMvc.perform(
+                        post("/v1/accommodation")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                ).andDo(print())
+                .andExpect(status().isCreated());
     }
 }
